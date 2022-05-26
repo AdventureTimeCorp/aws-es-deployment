@@ -38,11 +38,11 @@ provider "aws" {
   profile = var.aws_profile
 }
 
-# provider "kubernetes" {
-#   config_path    = "~/.kube/config"
-#   config_context = "arn:aws:eks:eu-central-1:075110123191:cluster/diia-stage"
+provider "kubernetes" {
+  config_path    = "./kubeconfig_aws-dev-es-cloud"
+  config_context = "eks_aws-dev-es-cloud"
 
-#   # host                   = "https://BF12871EA8BB0E53B3BD0C4EA616D2B5.gr7.eu-central-1.eks.amazonaws.com"
-#   # cluster_ca_certificate = base64decode(element(concat(data.aws_eks_cluster.cluster[*].certificate_authority.0.data, [""]), 0))
-#   # token                  = element(concat(data.aws_eks_cluster_auth.cluster[*].token, [""]), 0)
-# }
+  host                   = "https://B3688F32201C7462F415AEA0105DD15A.gr7.eu-central-1.eks.amazonaws.com"
+  cluster_ca_certificate = base64decode(element(concat(data.aws_eks_cluster.cluster[*].certificate_authority.0.data, [""]), 0))
+  token                  = element(concat(data.aws_eks_cluster_auth.cluster[*].token, [""]), 0)
+}

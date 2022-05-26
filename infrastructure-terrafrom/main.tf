@@ -100,7 +100,7 @@ module "eks" {
   cluster_name = var.platform_name
 
   vpc_id  = var.create_vpc ? module.vpc.vpc_id : var.vpc_id
-  subnets = var.create_vpc ? module.vpc.private_subnets : var.private_subnets_id
+  subnets = var.create_vpc ? module.vpc.public_subnets : var.public_subnets_id
 
   cluster_version = var.cluster_version
   enable_irsa     = var.enable_irsa
@@ -113,7 +113,7 @@ module "eks" {
   cluster_iam_role_name        = var.manage_cluster_iam_resources ? local.cluster_iam_role_name_to_create : var.cluster_iam_role_name
   workers_role_name            = var.manage_worker_iam_resources ? local.worker_iam_role_name_to_create : ""
 
-  cluster_endpoint_private_access = true
+  cluster_endpoint_private_access = false
   cluster_endpoint_public_access  = true
   cluster_create_security_group   = false
   worker_create_security_group    = false

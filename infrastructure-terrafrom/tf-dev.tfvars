@@ -42,8 +42,6 @@ worker_iam_instance_profile_name = ""
 
 demand_instance_types = ["r5.large"]
 spot_instance_types   = ["r5.large", "r4.large"] # need to ensure we use nodes with more memory
-mongo_instance_type   = "t3.micro"
-nginx_instance_type   = "t3.micro"
 
 # Define CIDR blocks and/or prefix lists if any to whitelist for public access on LBs
 
@@ -91,10 +89,10 @@ map_users = [
 
 map_roles = [
   {
-    "rolearn" : "arn:aws:iam::764324427262:role/EKSClusterAdminRole",
+    "rolearn" : "arn:aws:iam::723915311050:role/EKSClusterAdminRole",
     "username" : "eksadminrole",
     "groups" : ["system:masters"]
-  },
+  }
 ]
 
 tags = {

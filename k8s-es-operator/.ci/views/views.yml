@@ -1,0 +1,5 @@
+---
+- view: 
+    name: 'cloud-on-k8s'
+    regex: 'cloud-on-k8s-.*'
+    view-type: list

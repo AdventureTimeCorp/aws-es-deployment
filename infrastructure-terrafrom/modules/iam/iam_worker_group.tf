@@ -18,7 +18,7 @@ resource "aws_iam_instance_profile" "workers" {
   name_prefix = local.worker_group_role_name
   role        = aws_iam_role.workers[0].name
 
-  tags = merge(var.tags, map("Name", local.worker_group_role_name))
+  tags = merge(var.tags, tomap({"Name" = local.worker_group_role_name}))
 
   lifecycle {
     create_before_destroy = true
@@ -31,7 +31,7 @@ resource "aws_iam_role" "workers" {
   description           = "IAM role to be used by worker group nodes"
   assume_role_policy    = data.aws_iam_policy_document.workers_assume_role_policy.json
   force_detach_policies = true
-  tags                  = merge(var.tags, map("Name", local.worker_group_role_name))
+  tags                  = merge(var.tags, tomap({"Name" = local.worker_group_role_name}))
 }
 
 resource "aws_iam_role_policy_attachment" "workers_amazon_eks_worker_node_policy" {

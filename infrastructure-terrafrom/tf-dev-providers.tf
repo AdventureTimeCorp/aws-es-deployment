@@ -1,9 +1,14 @@
 terraform {
-  backend "remote" {
-    hostname = "app.terraform.io"
-    organization = var.TF_CLOUD_ORGANIZATION
-  }
+  # backend "remote" {
+  #   hostname = "app.terraform.io"
+  #   organization = var.TF_CLOUD_ORGANIZATION
+  # }
 
+  backend "s3" {
+    bucket = "tf-state-dev-es-deplyment"
+    key    = "dev/tf/state/"
+    region = "eu-central-1"
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"

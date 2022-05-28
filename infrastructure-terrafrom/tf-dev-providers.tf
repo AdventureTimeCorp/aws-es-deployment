@@ -2,10 +2,6 @@ terraform {
   backend "remote" {
     hostname = "app.terraform.io"
     organization = var.TF_CLOUD_ORGANIZATION
-
-    workspaces {
-      prefix = "naviteq-"
-    }
   }
 
   required_providers {

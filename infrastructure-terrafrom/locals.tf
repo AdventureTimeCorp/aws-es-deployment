@@ -82,14 +82,8 @@ locals {
       root_volume_size    = lookup(var.tenants[key], "root_volume_size", local.tenants_defaults["root_volume_size"])
       enable_monitoring   = lookup(var.tenants[key], "enable_monitoring", local.tenants_defaults["enable_monitoring"])
       key_name            = lookup(var.tenants[key], "key_name", local.tenants_defaults["key_name"])
-      iam_instance_profile_name = var.manage_worker_iam_resources ? "" : coalesce(
-        module.iam_tenants_worker_groups[key].worker_group_instance_profile_name,
-        lookup(var.tenants[key], "iam_instance_profile_name", local.tenants_defaults["iam_instance_profile_name"])
-      )
-      iam_role_id = var.manage_worker_iam_resources ? try(coalesce(
-        module.iam_tenants_worker_groups[key].worker_group_role_name,
-        lookup(var.tenants[key], "iam_role_id", local.tenants_defaults["iam_role_id"])
-      ), local.worker_iam_role_name_to_create) : ""
+      iam_instance_profile_name =  local.tenants_defaults["iam_instance_profile_name"]
+      iam_role_id = ""
       metadata_http_endpoint               = lookup(var.tenants[key], "metadata_http_endpoint", local.tenants_defaults["metadata_http_endpoint"])
       metadata_http_tokens                 = lookup(var.tenants[key], "metadata_http_tokens", local.tenants_defaults["metadata_http_tokens"])
       metadata_http_put_response_hop_limit = lookup(var.tenants[key], "metadata_http_put_response_hop_limit", local.tenants_defaults["metadata_http_put_response_hop_limit"])

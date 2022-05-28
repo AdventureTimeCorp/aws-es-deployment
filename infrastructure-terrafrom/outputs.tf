@@ -23,19 +23,19 @@ output "cluster_oidc_issuer_url" {
   value       = module.eks.cluster_oidc_issuer_url
 }
 
-output "worker_group_instance_profile_names" {
-  description = "Created IAM instance profiles names to attach to worker group nodes"
-  value = var.extended_outputs ? tomap({
-    for k, v in module.iam_tenants_worker_groups : k => v.worker_group_instance_profile_name
-  }) : {}
-}
+# output "worker_group_instance_profile_names" {
+#   description = "Created IAM instance profiles names to attach to worker group nodes"
+#   value = var.extended_outputs ? tomap({
+#     for k, v in module.iam_tenants_worker_groups : k => v.worker_group_instance_profile_name
+#   }) : {}
+# }
 
-output "kaniko_role_names" {
-  description = "Created IAM roles names to be used by Kaniko pod"
-  value = var.extended_outputs ? tomap({
-    for k, v in module.iam_tenants_kaniko : k => v.kaniko_role_name
-  }) : {}
-}
+# output "kaniko_role_names" {
+#   description = "Created IAM roles names to be used by Kaniko pod"
+#   value = var.extended_outputs ? tomap({
+#     for k, v in module.iam_tenants_kaniko : k => v.kaniko_role_name
+#   }) : {}
+# }
 
 output "workers_asg_ids" {
   description = "Ids of the autoscaling groups containing workers."

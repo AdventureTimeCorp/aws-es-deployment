@@ -20,7 +20,7 @@ platform_cidr = "10.161.0.0/16"
 private_cidrs = ["10.161.0.0/20", "10.161.16.0/20", "10.161.32.0/20"]
 public_cidrs  = ["10.161.208.0/20", "10.161.224.0/20", "10.161.240.0/20"]
 
-#nat_gateway_cidr = ["3.72.69.251/32", "18.159.188.57/32", "18.193.60.7/32"]
+# nat_gateway_cidr = ["18.157.119.192/32"]
 
 # EKS cluster configuration
 cluster_version = "1.21"
@@ -29,10 +29,10 @@ enable_irsa     = true
 
 
 # Define if IAM roles should be created during the deployment or used existing ones
-manage_cluster_iam_resources     = true # if set to false, cluster_iam_role_name must be specified
-manage_worker_iam_resources      = true # if set to false, worker_iam_instance_profile_name must be specified for workers
-cluster_iam_role_name            = ""
-worker_iam_instance_profile_name = ""
+manage_cluster_iam_resources     = false # if set to false, cluster_iam_role_name must be specified
+manage_worker_iam_resources      = false # if set to false, worker_iam_instance_profile_name must be specified for workers
+cluster_iam_role_name            = "EKSClusterAdminRole"
+worker_iam_instance_profile_name = "EKSClusterAdminRole"
 
 # demand_instance_types = ["r5.large"]
 # spot_instance_types   = ["r5.large", "r4.large"]

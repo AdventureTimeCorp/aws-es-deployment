@@ -10,6 +10,13 @@ resource "aws_security_group" "vpc_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    description = "Allow all outbound"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   ingress {
     description = "SSH Access to an instance"
@@ -35,7 +42,7 @@ resource "aws_security_group" "vpc_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(var.tags, tomap({ "Name" = "${var.platform_name}" }))
+  tags = merge(var.tags, tomap({ "Name" = var.platform_name }))
 }
 
 resource "aws_security_group" "kunernetes_nodes" {

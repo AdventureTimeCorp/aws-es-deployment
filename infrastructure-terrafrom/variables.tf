@@ -225,5 +225,5 @@ variable "extended_outputs" {
 variable "TF_CLOUD_ORGANIZATION" {
   description = "Whether to show extended outputs"
   type        = string
-  default     = ""
+  default     = "aws-es-deployment-demo"
 }

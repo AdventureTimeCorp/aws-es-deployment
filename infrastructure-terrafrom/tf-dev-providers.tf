@@ -1,7 +1,9 @@
 terraform {
   # backend "remote" {
-  #   hostname = "app.terraform.io"
-  #   organization = var.TF_CLOUD_ORGANIZATION
+  #   organization = "aws-es-deployment-demo"
+  #   workspaces {
+  #     name = "aws-es-deployment-dev"
+  #   }
   # }
 
   backend "s3" {

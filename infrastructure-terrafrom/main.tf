@@ -13,7 +13,7 @@ module "vpc" {
   enable_dns_hostnames   = true
   enable_dns_support     = true
   enable_nat_gateway     = true
-  single_nat_gateway     = true
+  single_nat_gateway     = false
   one_nat_gateway_per_az = false
 
   tags = var.tags
@@ -127,6 +127,7 @@ module "eks" {
 
   worker_groups_launch_template = local.worker_groups_launch_template_tenants
 
+  manage_aws_auth = false
   map_users = var.map_users
   map_roles = var.map_roles
 

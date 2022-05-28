@@ -12,7 +12,7 @@ aws_profile             = "default"
 # acm_certificate_arn     = "arn:aws:acm:eu-central-1:075110123191:certificate/7726b4e7-a909-4880-9a91-8662c28d0178" # The ACM certificate must be in the ALB region. Requirement for Application Load Balancer deployment
 
 platform_name        = "aws-dev-es-cloud"            # the name of the cluster and AWS resources
-platform_domain_name = "aws-dev-es-cloud.local" # must be created as a prerequisite
+platform_domain_name = "es.beseder.org" # must be created as a prerequisite
 
 # The following will be created or used existing depending on the create_vpc value
 subnet_azs    = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]

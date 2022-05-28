@@ -1,6 +1,16 @@
 terraform {
-  # required_version = "= 0.14.10"
+  # backend "remote" {
+  #   organization = "aws-es-deployment-demo"
+  #   workspaces {
+  #     name = "aws-es-deployment-dev"
+  #   }
+  # }
 
+  backend "s3" {
+    bucket = "tf-state-dev-es-deplyment"
+    key    = "dev/tf/state/"
+    region = "eu-central-1"
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"

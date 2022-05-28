@@ -1,5 +1,12 @@
 terraform {
-  # required_version = "= 0.14.10"
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = var.TF_CLOUD_ORGANIZATION
+
+    workspaces {
+      prefix = "naviteq-"
+    }
+  }
 
   required_providers {
     aws = {

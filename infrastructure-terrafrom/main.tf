@@ -127,6 +127,7 @@ module "eks" {
 
   worker_groups_launch_template = local.worker_groups_launch_template_tenants
 
+  manage_aws_auth = false
   map_users = var.map_users
   map_roles = var.map_roles
 

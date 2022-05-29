@@ -5,9 +5,12 @@ metadata:
   #uncomment the lines below to copy the specified node labels as pod annotations and use it as an environment variable in the Pods
   annotations:
    eck.k8s.elastic.co/downward-node-labels: "topology.kubernetes.io/zone"
-  name: elasticsearch-cluster
+  name: es-api-cluster
 spec:
-  version: 8.2.0
+  version: 8.2.2
+  auth:
+    fileRealm:
+      - secretName: filerealm-secret-es-admin-auth
   nodeSets:
   - name: default
     config:
@@ -68,7 +71,7 @@ spec:
           requests:
             storage: 50Gi
         storageClassName: gp2
-  # # inject secure settings into Elasticsearch nodes from k8s secrets references
+  # inject secure settings into Elasticsearch nodes from k8s secrets references
   # secureSettings:
   # - secretName: ref-to-secret
   # - secretName: another-ref-to-secret
@@ -76,18 +79,69 @@ spec:
   #   entries:
   #   - key: value1
   #     path: newkey # project a key to a specific path (optional)
-  # http:
-  #   service:
-  #     spec:
-  #       # expose this cluster Service with a LoadBalancer
-  #       type: LoadBalancer
-  #   tls:
-  #     selfSignedCertificate:
-  #       # add a list of SANs into the self-signed HTTP certificate
-  #       subjectAltNames:
-  #       - ip: 192.168.1.2
-  #       - ip: 192.168.1.3
-  #       - dns: elasticsearch-sample.example.com
-  #     certificate:
-  #       # provide your own certificate
-  #       secretName: my-cert
+  http:
+    service:
+      spec:
+        # expose this cluster Service with a LoadBalancer
+        type: LoadBalancer
+    tls:
+      selfSignedCertificate:
+        # add a list of SANs into the self-signed HTTP certificate
+        subjectAltNames:
+        - ip: 192.168.1.2
+        - ip: 192.168.1.3
+        - dns: elasticsearch-sample.example.com
+      # certificate:
+      #   # provide your own certificate
+      #   secretName: my-cert
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: kb-es-cluster
+spec:
+  version: 8.2.2
+  count: 2
+  config:
+     monitoring.ui.ccs.enabled: false
+  elasticsearchRef:
+    name: "es-api-cluster"
+  http:
+   service:
+     spec:
+       type: LoadBalancer
+  podTemplate:
+    metadata:
+      labels:
+        foo: bar
+    spec:
+      containers:
+      - name: kibana
+        resources:
+          limits:
+            memory: 1Gi
+            cpu: 1.5
+---
+apiVersion: apm.k8s.elastic.co/v1
+kind: ApmServer
+metadata:
+  name: apm-es-cloud
+spec:
+  version: 8.2.0
+  count: 1
+  elasticsearchRef:
+    name: "es-api-cluster"
+  # this allows ECK to configure automatically the Kibana endpoint as described in https://www.elastic.co/guide/en/apm/server/current/setup-kibana-endpoint.html
+  kibanaRef:
+    name: "kb-es-cluster"
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: filerealm-secret-es-admin-auth
+stringData:
+  users: |-
+    naviteq:$2a$10$deoY2/HykRigXIZ09Op64uTnMZBuWDSy5/GWz9tPNlmny9cQePUq.
+  users_roles: |-
+    admin:naviteq
+    superuser:naviteq

@@ -55,8 +55,8 @@ spec:
           # specify resource limits and requests
           resources:
             limits:
-              memory: 3Gi
-              cpu: 1.5
+              memory: 4Gi
+              cpu: 2
           env:
             - name: ZONE
               valueFrom:
@@ -131,8 +131,8 @@ spec:
       - name: kibana
         resources:
           limits:
-            memory: 2Gi
-            cpu: 1
+            memory: 1Gi
+            cpu: 1.5
 ---
 apiVersion: apm.k8s.elastic.co/v1
 kind: ApmServer

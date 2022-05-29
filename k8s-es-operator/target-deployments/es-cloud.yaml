@@ -1,3 +1,15 @@
+# Create admin user first
+kind: Secret
+apiVersion: v1
+metadata:
+  name: filerealm-secret-es-admin-auth
+stringData:
+  users: |-
+    naviteq:$2a$10$deoY2/HykRigXIZ09Op64uTnMZBuWDSy5/GWz9tPNlmny9cQePUq.
+  users_roles: |-
+    admin:naviteq
+    superuser:naviteq
+---
 # This sample sets up an Elasticsearch cluster with 3 nodes.
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
@@ -135,13 +147,64 @@ spec:
   kibanaRef:
     name: "kb-es-cluster"
 ---
-kind: Secret
-apiVersion: v1
+apiVersion: beat.k8s.elastic.co/v1beta1
+kind: Beat
 metadata:
-  name: filerealm-secret-es-admin-auth
-stringData:
-  users: |-
-    naviteq:$2a$10$deoY2/HykRigXIZ09Op64uTnMZBuWDSy5/GWz9tPNlmny9cQePUq.
-  users_roles: |-
-    admin:naviteq
-    superuser:naviteq
+  name: es-filebeats
+spec:
+  type: filebeat
+  version: 8.2.2
+  elasticsearchRef:
+    name: es-api-cluster
+  config:
+    filebeat.inputs:
+    - type: container
+      paths:
+      - /var/log/containers/*.log
+  daemonSet:
+    podTemplate:
+      spec:
+        dnsPolicy: ClusterFirstWithHostNet
+        hostNetwork: true
+        securityContext:
+          runAsUser: 0
+        containers:
+        - name: filebeat
+          volumeMounts:
+          - name: varlogcontainers
+            mountPath: /var/log/containers
+          - name: varlogpods
+            mountPath: /var/log/pods
+          - name: varlibdockercontainers
+            mountPath: /var/lib/docker/containers
+        volumes:
+        - name: varlogcontainers
+          hostPath:
+            path: /var/log/containers
+        - name: varlogpods
+          hostPath:
+            path: /var/log/pods
+        - name: varlibdockercontainers
+          hostPath:
+            path: /var/lib/docker/containers
+---
+apiVersion: beat.k8s.elastic.co/v1beta1
+kind: Beat
+metadata:
+  name: es-heartbeat
+spec:
+  type: heartbeat
+  version: 8.2.2
+  elasticsearchRef:
+    name: es-api-cluster
+  config:
+    heartbeat.monitors:
+    - type: http
+      schedule: '@every 5s'
+      hosts: ["http://google.com"]
+  deployment:
+    podTemplate:
+      spec:
+        dnsPolicy: ClusterFirstWithHostNet
+        securityContext:
+          runAsUser: 0

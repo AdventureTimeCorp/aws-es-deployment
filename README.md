@@ -29,7 +29,10 @@
 
  * Then apply - HA Clusters of Elastic and Kibana. And for example APM server.
 
-```   kubectl apply -f es-cloud.yaml```
+```   
+      kubectl apply  -f es-cloud.yaml -n elastic-deployment
+      kubectl apply  -f metricbeat.yaml -n elastic-deployment
+```
 
  * Get Public Https endpoints Elastic at TCP 9200 and Kibana at TCP 5601
 

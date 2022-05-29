@@ -1,6 +1,3 @@
-# es-module
-
-
 # To Install the infrastructure please use the following instructions: 
  * First of all please review a variables available in variables.tf 
  * You can see an example in the file tf-dev.tfvars 
